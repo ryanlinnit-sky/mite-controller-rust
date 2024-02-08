@@ -20,7 +20,7 @@ impl WorkTracker {
 
     pub fn set_actual(&mut self, runner_id: i32, work: HashMap<i32, i32>) {
         let runner_work = self.all_work.get(&runner_id);
-        println!("runner_work: {:?}", runner_work);
+        // println!("runner_work: {:?}", runner_work);
 
         // for k, v in self._all_work[runner_id].items():
         //     self._total_work[k] -= v
@@ -52,13 +52,13 @@ impl WorkTracker {
             // *total_work += v;
         }
         // self._all_work[runner_id] = defaultdict(int, work)
-        println!("Adding work: {:?} for runner: {}", work, runner_id);
+        // println!("Adding work: {:?} for runner: {}", work, runner_id);
         self.all_work.insert(runner_id, work);
     }
 
     pub fn add_assumed(&mut self, runner_id: i32, work: HashMap<i32, i32>) {
         let current = self.all_work.get_mut(&runner_id).unwrap();
-        println!("current: {:?}", current);
+        // println!("current: {:?}", current);
         for (k, v) in work.iter() {
             if current.contains_key(k) {
                 // let volume = scenario_volume_map.get(scenario_id).unwrap();
@@ -182,6 +182,8 @@ impl Controller {
             .checkin_data(completed_data_ids.iter().map(|x| x.unwrap()).collect());
 
         let work = self.required_work_for_runner(runner_id, max_work);
+
+        // println!("request_work - {} {:?}", runner_id, work);
 
         // [TODO] correct config
         //     self._config_manager.get_changes_for_runner(runner_id),

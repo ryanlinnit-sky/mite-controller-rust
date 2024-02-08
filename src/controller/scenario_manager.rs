@@ -69,7 +69,7 @@ impl ScenarioManager {
         let required = self.get_required_work();
         let diff = Self::remove_a_from_b(current_work.clone(), required.clone());
         let total = required.len() as i32;
-        let runners_share_limit =
+        let mut runners_share_limit =
             (total as f64) / (num_runners as f64) - (num_runner_current_work as f64);
 
         // python controller
@@ -81,6 +81,8 @@ impl ScenarioManager {
             "total={:?} num_runners={:?} num_runner_current_work={:?} runners_share_limit={:?}",
             total, num_runners, num_runner_current_work, runners_share_limit
         );
+
+        runners_share_limit = 6.0;
 
         // let mut limit = max(0, runners_share_limit);
         let mut limit = runners_share_limit.max(0.0);
@@ -182,24 +184,32 @@ impl ScenarioManager {
         c
     }
 
+    pub fn now(&mut self) -> u64 {
+        SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .unwrap()
+            .as_secs()
+            - self.start_time
+    }
+
     pub fn get_required_work(&mut self) -> HashMap<i32, i32> {
+        let now = self.now();
         if self.in_start {
-            let now = SystemTime::now()
-                .duration_since(SystemTime::UNIX_EPOCH)
-                .unwrap()
-                .as_secs();
             if now <= self.delay {
                 return self.required.clone();
             }
             self.in_start = false;
-            self.start_time = now;
+            self.start_time = SystemTime::now()
+                .duration_since(SystemTime::UNIX_EPOCH)
+                .unwrap()
+                .as_secs();
         }
-        let now = SystemTime::now()
-            .duration_since(SystemTime::UNIX_EPOCH)
-            .unwrap()
-            .as_secs();
         if now >= self.current_period_end {
             // println!("calling - Updating required and period");
+            println!(
+                "current_period_end: {} now {} period {}",
+                self.current_period_end, now, self.period
+            );
             self.update_required_and_period(self.current_period_end, (now + self.period) as u64);
         }
         self.required.clone()

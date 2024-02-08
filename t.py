@@ -1,3 +1,4 @@
+import asyncio
 # from mite_http import mite_http
 
 # from mite.scenario import StopVolumeModel
@@ -15,9 +16,9 @@ def volume_model_factory(n, duration=60 * 5):
 
 
 scenarios = [
-    (10, "t:j", None),
-    (20, "t:j", None),
-    (30, "t:j", None),
+    (1, "t:j", None),
+    (2, "t:j", None),
+    (3, "t:j", None),
 ]
 
 
@@ -29,6 +30,7 @@ def s():
 
 # @mite_http
 async def j(ctx):
+    await asyncio.sleep(1)
     print("hello")
     # await ctx.http.get("http://localhost:8000/")
 
