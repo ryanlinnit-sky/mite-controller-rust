@@ -1,0 +1,14 @@
+[package]
+name = "mite-controller-rust"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "4.4.18", features = ["derive"] }
+rmp = "0.8.12"
+rmp-serde = "1.1.2"
+serde = { version = "1.0.196", features = ["derive"] }
+zmq = "0.10.0"
+pyo3 = { version = "0.20.2", features = ["auto-initialize"] }
